@@ -1,14 +1,22 @@
+import CardList from "@/components/card-list";
+
 export default function Home() {
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-        <h1 className="text-4xl font-bold text-center sm:text-left">Welcome to Invoice Vault</h1>
+    <div className="grid items-center p-4 pb-20 sm:p-20">
+      <main className="flex flex-col gap-8 row-start-2 sm:items-start">
+        {/*  <div>
+          <h1 className="text-4xl font-bold text-center sm:text-left">
+            Invoice Vault
+          </h1>
         </div>
+        <div className="flex gap-4 items-center flex-col sm:flex-row">
+          <Form />
+        </div> */}
+        <CardList />
       </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-       <p className="text-sm text-center sm:text-left">© 2025 Invoice Vault</p>
-      </footer>
+      {/*  <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
+        <p className="text-sm text-center sm:text-left">© 2025 Invoice Vault</p>
+      </footer> */}
     </div>
   );
 }
