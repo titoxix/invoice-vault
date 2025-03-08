@@ -12,7 +12,11 @@ export default function TakePhoto() {
   const startCamera = async () => {
     try {
       const newStream = await navigator.mediaDevices.getUserMedia({
-        video: { facingMode: { exact: "environment" } }, // Request back camera
+        video: {
+          facingMode: { exact: "environment" }, // Request back camera
+          width: { ideal: 1280 }, // Set resolution
+          height: { ideal: 720 },
+        },
       });
       setStream(newStream); // Store stream state
 
@@ -58,7 +62,12 @@ export default function TakePhoto() {
 
   return (
     <div className="flex flex-col items-center mt-6">
-      <video ref={videoRef} autoPlay className="w-full max-w-md border" />
+      <video
+        ref={videoRef}
+        autoPlay
+        playsInline // Prevents fullscreen on iOS
+        className="w-full max-w-md border"
+      />
 
       <div className="flex gap-2 mt-2">
         <button
