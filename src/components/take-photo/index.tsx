@@ -1,0 +1,61 @@
+"use client";
+
+import { useRef, useState } from "react";
+
+export default function TakePhoto() {
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const [photo, setPhoto] = useState<string | null>(null);
+
+  // Start the camera
+  const startCamera = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+      if (videoRef.current) {
+        videoRef.current.srcObject = stream;
+      }
+    } catch (error) {
+      console.error("Error accessing camera:", error);
+    }
+  };
+
+  // Capture the photo
+  const capturePhoto = () => {
+    if (videoRef.current && canvasRef.current) {
+      const context = canvasRef.current.getContext("2d");
+      if (context) {
+        canvasRef.current.width = videoRef.current.videoWidth;
+        canvasRef.current.height = videoRef.current.videoHeight;
+        context.drawImage(videoRef.current, 0, 0);
+        setPhoto(canvasRef.current.toDataURL("image/png")); // Convert to Data URL
+      }
+    }
+  };
+
+  return (
+    <div className="flex flex-col items-center mt-6">
+      <video ref={videoRef} autoPlay className="w-full max-w-md border" />
+      <button
+        onClick={startCamera}
+        className="mt-2 px-4 py-2 bg-blue-500 text-white rounded"
+      >
+        Start Camera
+      </button>
+      <button
+        onClick={capturePhoto}
+        className="mt-2 px-4 py-2 bg-green-500 text-white rounded"
+      >
+        Capture Photo
+      </button>
+
+      <canvas ref={canvasRef} className="hidden" />
+
+      {photo && (
+        <div className="mt-4">
+          <h3>Captured Photo:</h3>
+          <img src={photo} alt="Captured" className="border" />
+        </div>
+      )}
+    </div>
+  );
+}
