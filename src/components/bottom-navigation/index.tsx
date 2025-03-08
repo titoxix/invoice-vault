@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 export default function BottomNavigation() {
   const router = useRouter();
   return (
-    <div className="fixed z-50 w-full h-16 max-w-lg -translate-x-1/2  border rounded-full bottom-4 left-1/2 bg-gray-700 border-gray-600">
+    <div className="fixed z-50 w-full h-16 max-w-lg -translate-x-1/2 border rounded-full bottom-8 left-1/2 bg-gray-700 border-gray-600">
       <div className="grid h-full max-w-lg grid-cols-5 mx-auto">
         <Option
           text="Home"
