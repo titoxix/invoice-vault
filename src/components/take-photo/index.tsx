@@ -1,18 +1,23 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 
 export default function TakePhoto() {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [photo, setPhoto] = useState<string | null>(null);
+  const [stream, setStream] = useState<MediaStream | null>(null);
 
   // Start the camera
   const startCamera = async () => {
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+      const newStream = await navigator.mediaDevices.getUserMedia({
+        video: { facingMode: { exact: "environment" } }, // Request back camera
+      });
+      setStream(newStream); // Store stream state
+
       if (videoRef.current) {
-        videoRef.current.srcObject = stream;
+        videoRef.current.srcObject = newStream;
       }
     } catch (error) {
       console.error("Error accessing camera:", error);
@@ -32,21 +37,43 @@ export default function TakePhoto() {
     }
   };
 
+  // Stop the camera stream
+  const stopCamera = () => {
+    if (stream) {
+      stream.getTracks().forEach((track) => track.stop());
+      setStream(null);
+    }
+  };
+
+  // Delete the photo
+  const deletePhoto = () => {
+    setPhoto(null);
+    stopCamera(); // Stop camera when deleting the photo
+  };
+
+  // Ensure the camera stops when the component unmounts
+  useEffect(() => {
+    return () => stopCamera();
+  }, []);
+
   return (
     <div className="flex flex-col items-center mt-6">
       <video ref={videoRef} autoPlay className="w-full max-w-md border" />
-      <button
-        onClick={startCamera}
-        className="mt-2 px-4 py-2 bg-blue-500 text-white rounded"
-      >
-        Start Camera
-      </button>
-      <button
-        onClick={capturePhoto}
-        className="mt-2 px-4 py-2 bg-green-500 text-white rounded"
-      >
-        Capture Photo
-      </button>
+
+      <div className="flex gap-2 mt-2">
+        <button
+          onClick={startCamera}
+          className="mt-2 px-4 py-2 bg-blue-500 text-white rounded"
+        >
+          Start Camera
+        </button>
+        <button
+          onClick={capturePhoto}
+          className="mt-2 px-4 py-2 bg-green-500 text-white rounded"
+        >
+          Capture Photo
+        </button>
+      </div>
 
       <canvas ref={canvasRef} className="hidden" />
 
@@ -54,6 +81,12 @@ export default function TakePhoto() {
         <div className="mt-4">
           <h3>Captured Photo:</h3>
           <img src={photo} alt="Captured" className="border" />
+          <button
+            onClick={deletePhoto}
+            className="mt-2 px-4 py-2 bg-red-500 text-white rounded"
+          >
+            Delete Photo
+          </button>
         </div>
       )}
     </div>
