@@ -2,11 +2,16 @@
 
 import Option from "./option";
 import { useRouter } from "next/navigation";
+import Modal from "@/components/modal";
 
 export default function BottomNavigation() {
   const router = useRouter();
+
+  const handleModal = () => {
+    return <Modal show={true} />;
+  };
   return (
-    <div className="fixed z-50 w-full h-16 max-w-lg -translate-x-1/2  border rounded-full bottom-4 left-1/2 bg-gray-700 border-gray-600">
+    <div className="fixed z-50 w-full h-16 max-w-lg -translate-x-1/2 border rounded-full bottom-8 left-1/2 bg-gray-700 border-gray-600">
       <div className="grid h-full max-w-lg grid-cols-5 mx-auto">
         <Option
           text="Home"
@@ -54,6 +59,7 @@ export default function BottomNavigation() {
           <button
             data-tooltip-target="tooltip-new"
             type="button"
+            onClick={() => handleModal()}
             className="inline-flex items-center justify-center w-10 h-10 font-medium bg-blue-600 rounded-full hover:bg-blue-700 group focus:ring-4 focus:ring-blue-300 focus:outline-none dark:focus:ring-blue-800"
           >
             <svg
@@ -82,6 +88,7 @@ export default function BottomNavigation() {
           Create new item
           <div className="tooltip-arrow" data-popper-arrow></div>
         </div>
+
         <button
           data-tooltip-target="tooltip-settings"
           type="button"
@@ -137,6 +144,7 @@ export default function BottomNavigation() {
           <div className="tooltip-arrow" data-popper-arrow></div>
         </div>
       </div>
+      <Modal show={true} />
     </div>
   );
 }
